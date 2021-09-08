@@ -14,29 +14,7 @@ const PORT = process.env.PORT
 // const weather = require('./data/weather.json');
 //================== Forecast Class
 
-class Forecast {
-    constructor(date, description) {
-        this.date = date;
-        this.description = description;
-        Forecast.all.push(this);
-    }
-}
-Forecast.all = [];
 
-
-
-//================== Movies Class :
-class Movies {
-    constructor(title, overview, vote, count, img,popularity,release_date) {
-      this.title = title;
-      this.overview = overview;
-      this.vote = vote;
-      this.count = count;
-      this.img = img;
-      this.popularity=popularity;
-      this.release_date=release_date;
-    }
-  }
 
 
     //================== API END-POINT 
