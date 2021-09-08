@@ -11,7 +11,7 @@ require('dotenv').config();
 const PORT = process.env.PORT
 
 
-const weather = require('./data/weather.json');
+// const weather = require('./data/weather.json');
 //================== Forecast Class
 
 class Forecast {
@@ -22,6 +22,21 @@ class Forecast {
     }
 }
 Forecast.all = [];
+
+
+
+//================== Movies Class :
+class Movies {
+    constructor(title, overview, vote, count, img,popularity,release_date) {
+      this.title = title;
+      this.overview = overview;
+      this.vote = vote;
+      this.count = count;
+      this.img = img;
+      this.popularity=popularity;
+      this.release_date=release_date;
+    }
+  }
 
 
     //================== API END-POINT 
@@ -43,6 +58,19 @@ app.get('/weather', (request, response) => {
             return new Forecast( item.datetime, item.weather.description);
         })
         response.json(newArray);
+
+        let arr1 = movieResponse.data.results.map((data1) => {
+            console.log(data1);
+            return new Movies(
+              `Title: ${data1.title}`,
+              `Overview: ${data1.overview}`,
+              `Average votes: ${data1.vote_average}`,
+              ` Total Votes: ${data1.vote_count}`,
+              `${data1.poster_path}`,
+              `popularity:${data1.popularity}`,
+              `release_date:${data1.release_date}`
+      
+            );
     }
     else {
         response.json('data not found')
