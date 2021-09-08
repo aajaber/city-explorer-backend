@@ -7,22 +7,24 @@ app.use(cors())
 
 require('dotenv').config();
 
+
 const PORT = process.env.PORT
 
 
 const weather = require('./data/weather.json');
-const { response } = require('express');
 //================== Forecast Class
 
 class Forecast {
     constructor(date, description) {
         this.date = date;
         this.description = description;
+        Forecast.all.push(this);
     }
 }
+Forecast.all = [];
 
 
-//================== API END-POINT 
+    //================== API END-POINT 
 
 
 app.get('/weather', (request, response) => {
@@ -47,15 +49,10 @@ app.get('/weather', (request, response) => {
     }
 });
 
-
-
-
-
-
 // a server endpoint 
 app.get('/', // our endpoint name
     function (req, res) { // callback function of what we should do with our request
-        res.send('Hello World ====================================') // our endpoint function response
+        res.send('Hello World ==') // our endpoint function response
     })
 
 // app.listen(8080) //
