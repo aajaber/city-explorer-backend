@@ -1,8 +1,10 @@
 # city-explorer-backend
 
 
-**Author**: Your Name Goes Here
+**Author**: Ahmad Jaber
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+
+![Data flow](lab.PNG)
 
 ## Overview
 <!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
@@ -26,10 +28,10 @@
 
 Name of feature: ________________________________
 
-Estimate of time needed to complete: _____
+Estimate of time needed to complete: 2 hours
 
 Start time: _____
 
 Finish time: _____
 
-Actual time needed to complete: _____
+Actual time needed to complete: still not complete.
