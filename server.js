@@ -23,8 +23,8 @@ app.get("/", function (req, res) {
 
 app.get("/weather", (request, response) => {
   const city_name = request.query.city_name;
-  // const lon = request.query.lon;
-  // const lat = request.query.lat;
+  const lon = request.query.lon;
+  const lat = request.query.lat;
 
   if (city_name) {
     const returnArr = weather.find((item) => {
@@ -50,9 +50,5 @@ app.get("/weather", (request, response) => {
 app.listen(PORT, () => {
   console.log(`server on port ${PORT}`);
 });
-
-
-
-
 
 // pk.d43cb260885bedf4dc024b0dff365856
