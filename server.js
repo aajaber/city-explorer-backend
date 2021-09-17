@@ -1,90 +1,124 @@
-'use strict'
+"use strict";
 
-const express = require('express')
-const app = express()
-const cors = require('cors');
-app.use(cors())
+require("dotenv").config();
+const express = require("express");
+const app = express();
+const cors = require("cors");
+const axios = require("axios");
+app.use(cors());
 
-require('dotenv').config();
+require("dotenv").config();
 
-
-const PORT = process.env.PORT
-
+const PORT = process.env.PORT;
 
 // const weather = require('./data/weather.json');
+const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
 //================== Forecast Class
 
 class Forecast {
-    constructor(date, description) {
-        this.date = date;
-        this.description = description;
-        Forecast.all.push(this);
-    }
+  constructor(date, description) {
+    this.date = date;
+    this.description = description;
+  }
 }
-Forecast.all = [];
-
-
 
 //================== Movies Class :
 class Movies {
-    constructor(title, overview, vote, count, img,popularity,release_date) {
-      this.title = title;
-      this.overview = overview;
-      this.vote = vote;
-      this.count = count;
-      this.img = img;
-      this.popularity=popularity;
-      this.release_date=release_date;
-    }
+  constructor(title, overview, vote, count, image, popularity, release_date) {
+    this.title = title;
+    this.overview = overview;
+    this.vote = vote;
+    this.count = count;
+    this.img = image;
+    this.popularity = popularity;
+    this.release_date = release_date;
   }
+}
 
+//================== API END-POINT
 
-    //================== API END-POINT 
+app.get("/weather", async (request, response) => {
+  let city_name = request.query.city;
+  // let long = request.query.long;
+  // let lat = request.query.lat;
 
+  const link = "https://api.weatherbit.io/v2.0/forecast/daily";
+  const linkResponse = await axios.get(
+    `${link}?city=${city_name}&key=${WEATHER_API_KEY}`
+  );
 
-app.get('/weather', (request, response) => {
-    let city_name = request.query.city_name;
-    let long = request.query.long;
-    let lat = request.query.lat;
+  //=================== Find method
 
-    //=================== Find method
-
-    const returedArray = weather.find((item) => {
-        retrun(item.city_name.toLowerCase() === city_name.toLowerCase());
+  if (city_name) {
+    let weatherAraay = linkResponse.data.data.map((item) => {
+      return new Forecast(item.weather.description, item.datetime);
     });
-    
-    if (returedArray) {
-        let newArray = returedArray.data.map((item) => {
-            return new Forecast( item.datetime, item.weather.description);
-        })
-        response.json(newArray);
 
-        let arr1 = movieResponse.data.results.map((data1) => {
-            console.log(data1);
-            return new Movies(
-              `Title: ${data1.title}`,
-              `Overview: ${data1.overview}`,
-              `Average votes: ${data1.vote_average}`,
-              ` Total Votes: ${data1.vote_count}`,
-              `${data1.poster_path}`,
-              `popularity:${data1.popularity}`,
-              `release_date:${data1.release_date}`
-      
-            );
+    if (weatherAraay.length) {
+      response.json(weatherAraay);
+      console.log("weatherAraay", weatherAraay);
+    } else {
+      response.send("No data.");
     }
-    else {
-        response.json('data not found')
-    }
+  } else {
+    response.json("Error");
+  }
 });
 
-// a server endpoint 
-app.get('/', // our endpoint name
-    function (req, res) { // callback function of what we should do with our request
-        res.send('Hello World ==') // our endpoint function response
-    })
+//============================== Movies method :
+
+const MOVIES_API_KEY = process.env.MOVIES_API_KEY;
+
+app.get("/movies", async (request, response) => {
+ 
+  const city_name = request.query.query;
+
+  
+  const movie = "https://api.themoviedb.org/3/search/movie";
+  const moviesLink = await axios.get(
+    `${movie}?query=${city_name}&api_key=${MOVIES_API_KEY}`
+  );
+
+ 
+
+  // response.json("error: Something went wrong.");
+  if (city_name) {
+    // console.log("hello",WEATHER_API_KEY);
+    // // console.log(returnArray);
+    let moviesArray = moviesLink.data.results.map((item) => {
+     
+      return new Movies(
+        item.title,
+        item.overview,
+        item.vote,
+        item.count,
+        item.image,
+        item.popularity,
+        item.release_date
+      );
+    });
+
+    if (moviesArray.length) {
+      response.json(moviesArray);
+    } else {
+      response.send("error:404.");
+    }
+  } else {
+    response.json("Error getting data from movies site");
+  }
+});
+
+// a server endpoint
+app.get(
+  "/", // our endpoint name
+  function (req, res) {
+    // callback function of what we should do with our request
+    res.send("Hello World =="); // our endpoint function response
+  }
+);
 
 // app.listen(8080) //
 
 app.listen(PORT, () => {
-    console.log(`server on port ${PORT}`);
+  console.log(`server on port ${PORT}`);
 });
