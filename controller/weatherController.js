@@ -4,7 +4,16 @@ require("dotenv").config();
 const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
 const Forecast = require("../models/weatherModel");
 
+const Cache = require("../helper/cache");
+let weatherCache = new Cache();
+
 const getWeather = async (request, response) => {
+  const offTime = 10000;
+  const minute = Date.now() - weatherCache.timeStamp > offTime;
+  if (minute) {
+    weatherCache = new Cache();
+  }
+
   let city_name = request.query.city;
 
   const link = "https://api.weatherbit.io/v2.0/forecast/daily";

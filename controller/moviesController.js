@@ -1,9 +1,17 @@
 const axios = require("axios");
-const { request, response } = require("express");
 require("dotenv").config();
 
 const MOVIES_API_KEY = process.env.MOVIES_API_KEY;
 const Movies = require("../models/moviesModel");
+
+const Cache = require("../helper/cache");
+let moviesCache = new Cache();
+
+const offTime = 10000;
+const seconds = Date.now() - moviesCache.timeStamp > offTime;
+if (seconds) {
+  moviesCache = new Cache();
+}
 
 const getMovies = async (request, response) => {
   const city_name = request.query.query;
