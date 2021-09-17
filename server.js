@@ -79,12 +79,8 @@ app.get("/movies", async (request, response) => {
     `${movie}?query=${city_name}&api_key=${MOVIES_API_KEY}`
   );
 
- 
-
-  // response.json("error: Something went wrong.");
   if (city_name) {
-    // console.log("hello",WEATHER_API_KEY);
-    // // console.log(returnArray);
+
     let moviesArray = moviesLink.data.results.map((item) => {
      
       return new Movies(
